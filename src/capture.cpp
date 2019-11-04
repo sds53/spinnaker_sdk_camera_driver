@@ -227,9 +227,7 @@ void acquisition::Capture::load_cameras() {
     for (int j=0; j<cam_ids_.size(); j++) {
         bool current_cam_found=false;
         for (int i=0; i<numCameras_; i++) {
-        
             acquisition::Camera cam(camList_.GetByIndex(i));
-            
             if (cam.get_id().compare(cam_ids_[j]) == 0) {
                 current_cam_found=true;
                 if (cam.get_id().compare(master_cam_id_) == 0) {
@@ -1202,7 +1200,6 @@ void acquisition::Capture::dynamicReconfigureCallback(spinnaker_sdk_camera_drive
     if(level == 1 || level ==3){
         ROS_INFO_STREAM("Target grey value : " << config.target_grey_value);
         for (int i = numCameras_-1 ; i >=0 ; i--) {
-            
             cams[i].setEnumValue("AutoExposureTargetGreyValueAuto", "Off");
             cams[i].setFloatValue("AutoExposureTargetGreyValue", config.target_grey_value);
         }
@@ -1211,7 +1208,6 @@ void acquisition::Capture::dynamicReconfigureCallback(spinnaker_sdk_camera_drive
         ROS_INFO_STREAM("Exposure "<<config.exposure_time);
         if(config.exposure_time > 0){
             for (int i = numCameras_-1 ; i >=0 ; i--) {
-
                 cams[i].setEnumValue("ExposureAuto", "Off");
                 cams[i].setEnumValue("ExposureMode", "Timed");
                 cams[i].setFloatValue("ExposureTime", config.exposure_time);

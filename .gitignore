@@ -41,3 +41,5 @@ devel
 
 # ignore avi
 *.avi
+
+cmake-build-debug
