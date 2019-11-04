@@ -1194,6 +1194,18 @@ std::string acquisition::Capture::todays_date()
     return td;
 }
 
+string num2LightingMode(int num) {
+    string str;
+    if (num == 0) {
+        str = "Normal";
+    } else if (num == 1) {
+        str = "Frontlight";
+    } else if (num == 2) {
+        str = "Backlight";
+    }
+    return str;
+}
+
 void acquisition::Capture::dynamicReconfigureCallback(spinnaker_sdk_camera_driver::spinnaker_camConfig &config, uint32_t level){
 
     ROS_INFO_STREAM("Dynamic Reconfigure: Level : " << level);
@@ -1227,22 +1239,16 @@ void acquisition::Capture::dynamicReconfigureCallback(spinnaker_sdk_camera_drive
       }
     }
 
-    ROS_INFO_STREAM("Pair : " << config.pair);
-    ROS_INFO_STREAM("Mode : " << config.lighting_mode);
-    if (config.pair == 0) {
-      if (config.lighting_mode == 0) {
-          cams[0].setEnumValue("AutoExposureLightingMode", "Normal");
-          // cams[1].setEnumValue("AutoExposureLightingMode", "Normal");
-      } else if (config.lighting_mode == 1) {
-          cams[0].setEnumValue("AutoExposureLightingMode", "Frontlight");
-          // cams[1].setEnumValue("AutoExposureLightingMode", "Frontlight");
-      } else if (config.lighting_mode == 2) {
-          cams[0].setEnumValue("AutoExposureLightingMode", "Backlight");
-          // cams[1].setEnumValue("AutoExposureLightingMode", "Backlight");
-      }
-    } else if (config.pair == 1) {
-
-    } else if (config.pair == 2) {
-
+    if (config.target_grey_value == 0) {
+        if (cams.size() > 0) cams[0].setEnumValue("AutoExposureLightingMode", num2LightingMode(config.cam1_lighting_mode));
+        if (cams.size() > 1) cams[1].setEnumValue("AutoExposureLightingMode", num2LightingMode(config.cam2_lighting_mode));
+        if (cams.size() > 2) cams[2].setEnumValue("AutoExposureLightingMode", num2LightingMode(config.cam3_lighting_mode));
+        if (cams.size() > 3) cams[3].setEnumValue("AutoExposureLightingMode", num2LightingMode(config.cam4_lighting_mode));
+        if (cams.size() > 4) cams[4].setEnumValue("AutoExposureLightingMode", num2LightingMode(config.cam5_lighting_mode));
+        if (cams.size() > 5) cams[5].setEnumValue("AutoExposureLightingMode", num2LightingMode(config.cam6_lighting_mode));
+    } else {
+        ROS_INFO_STREAM("Auto grey_level must be enabled. Set target_grey_value to 0.");
     }
+
+
 }
